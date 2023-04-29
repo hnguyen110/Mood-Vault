@@ -1,6 +1,11 @@
 import type { AWS } from "@serverless/typescript";
 
 import createLogGroup from "@functions/log-group/create-log-group";
+import getLogGroup from "@functions/log-group/get-log-group";
+import updateLogGroup from "@functions/log-group/update-log-group";
+import deleteLogGroup from "@functions/log-group/delete-log-group";
+import grantLogGroupAccess from "@functions/log-group/grant-log-group-access";
+import { revokeLogGroupAccess } from "@functions/index";
 import createLog from "@functions/log/create-log";
 import getLog from "@functions/log/get-log";
 import updateLog from "@functions/log/update-log";
@@ -39,7 +44,18 @@ const serverlessConfiguration: AWS = {
       },
     },
   },
-  functions: { createLogGroup, createLog, getLog, updateLog, deleteLog },
+  functions: {
+    createLogGroup,
+    getLogGroup,
+    updateLogGroup,
+    deleteLogGroup,
+    grantLogGroupAccess,
+    revokeLogGroupAccess,
+    createLog,
+    getLog,
+    updateLog,
+    deleteLog,
+  },
   package: { individually: true },
   custom: {
     esbuild: {

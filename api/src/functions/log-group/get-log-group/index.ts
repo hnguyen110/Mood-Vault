@@ -1,4 +1,3 @@
-import schema from "./schema";
 import { handlerPath } from "@libs/handler-resolver";
 
 export default {
@@ -6,13 +5,8 @@ export default {
   events: [
     {
       http: {
-        method: "put",
+        method: "get",
         path: "log-groups/{logGroupId}",
-        request: {
-          schemas: {
-            "application/json": schema,
-          },
-        },
         authorizer: {
           name: "authorizer",
           type: "COGNITO_USER_POOLS",

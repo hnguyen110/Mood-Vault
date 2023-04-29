@@ -3,7 +3,6 @@ import { formatJSONResponse } from "@libs/api-gateway";
 import { middyfy } from "@libs/lambda";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
-import { v4 as uuidv4 } from "uuid";
 
 import schema from "./schema";
 
@@ -21,7 +20,7 @@ const handler: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
 
     const item = {
       pk: `SUB#${event.requestContext.authorizer.claims.sub}#LOG_GROUP`,
-      sk: uuidv4(),
+      sk: event.pathParameters.logGroupId,
       ...event.body,
     };
 
@@ -33,7 +32,7 @@ const handler: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
     );
 
     return formatJSONResponse({
-      body: item,
+      ...item,
     });
   } catch (e) {
     console.log(e);

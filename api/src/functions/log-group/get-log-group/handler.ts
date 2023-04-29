@@ -2,10 +2,7 @@ import type { ValidatedEventAPIGatewayProxyEvent } from "@libs/api-gateway";
 import { formatJSONResponse } from "@libs/api-gateway";
 import { middyfy } from "@libs/lambda";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
-import { v4 as uuidv4 } from "uuid";
-
-import schema from "./schema";
+import { DynamoDBDocumentClient, GetCommand } from "@aws-sdk/lib-dynamodb";
 
 const client = DynamoDBDocumentClient.from(
   new DynamoDBClient({
@@ -13,27 +10,22 @@ const client = DynamoDBDocumentClient.from(
   })
 );
 
-const handler: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
-  event
-) => {
+const handler: ValidatedEventAPIGatewayProxyEvent<void> = async (event) => {
   try {
     console.log(event);
 
-    const item = {
-      pk: `SUB#${event.requestContext.authorizer.claims.sub}#LOG_GROUP`,
-      sk: uuidv4(),
-      ...event.body,
-    };
-
-    await client.send(
-      new PutCommand({
+    const { Item } = await client.send(
+      new GetCommand({
         TableName: process.env.MOOD_VAULT_TABLE,
-        Item: item,
+        Key: {
+          pk: `SUB#${event.requestContext.authorizer.claims.sub}#LOG_GROUP`,
+          sk: event.pathParameters.logGroupId,
+        },
       })
     );
 
     return formatJSONResponse({
-      ...item,
+      ...Item,
     });
   } catch (e) {
     console.log(e);

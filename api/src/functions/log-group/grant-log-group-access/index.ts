@@ -6,8 +6,8 @@ export default {
   events: [
     {
       http: {
-        method: "put",
-        path: "log-groups/{logGroupId}",
+        method: "post",
+        path: "log-groups/{logGroupId}/access",
         request: {
           schemas: {
             "application/json": schema,
