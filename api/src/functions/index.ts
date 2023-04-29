@@ -9,3 +9,11 @@ export { default as createLog } from "./log/create-log";
 export { default as getLog } from "./log/get-log";
 export { default as updateLog } from "./log/update-log";
 export { default as deleteLog } from "./log/delete-log";
+
+export { default as getTherapistProfile } from "./profile/therapist/get-profile";
+export { default as updateTherapistProfile } from "./profile/therapist/update-profile";
+export { default as deleteTherapistProfile } from "./profile/therapist/delete-profile";
+
+export { default as queryTherapistProfile } from "./opensearch/therapist/query-profile";
+
+export { default as dynamodbOpenSearchStreamHandler } from "./dynamodb/stream/open-search";

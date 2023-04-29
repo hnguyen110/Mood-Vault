@@ -1,15 +1,6 @@
 import type { AWS } from "@serverless/typescript";
 
-import createLogGroup from "@functions/log-group/create-log-group";
-import getLogGroup from "@functions/log-group/get-log-group";
-import updateLogGroup from "@functions/log-group/update-log-group";
-import deleteLogGroup from "@functions/log-group/delete-log-group";
-import grantLogGroupAccess from "@functions/log-group/grant-log-group-access";
-import { revokeLogGroupAccess } from "@functions/index";
-import createLog from "@functions/log/create-log";
-import getLog from "@functions/log/get-log";
-import updateLog from "@functions/log/update-log";
-import deleteLog from "@functions/log/delete-log";
+import * as functions from "@functions/index";
 
 const serverlessConfiguration: AWS = {
   service: "api",
@@ -29,6 +20,11 @@ const serverlessConfiguration: AWS = {
       MOOD_VAULT_TABLE: {
         Ref: "MoodVaultBD98DB49",
       },
+      OPENSEARCH_ENDPOINT:
+        "https://search-mood-vault-cnrgad6x636aodc5esxnygnv4a.us-east-1.es.amazonaws.com",
+      OPENSEARCH_USERNAME: "opensearch",
+      OPENSEARCH_PASSWORD: "AduVwv0fXt73#KMLfE62T@l%@z#br801#%MEmh8vAC8%zZ@q0k",
+      OPENSEARCH_INDEX: "moodvault",
     },
     iam: {
       role: {
@@ -40,22 +36,16 @@ const serverlessConfiguration: AWS = {
               "Fn::GetAtt": ["MoodVaultBD98DB49", "Arn"],
             },
           },
+          {
+            Effect: "Allow",
+            Action: ["es:*"],
+            Resource: "*",
+          },
         ],
       },
     },
   },
-  functions: {
-    createLogGroup,
-    getLogGroup,
-    updateLogGroup,
-    deleteLogGroup,
-    grantLogGroupAccess,
-    revokeLogGroupAccess,
-    createLog,
-    getLog,
-    updateLog,
-    deleteLog,
-  },
+  functions: functions,
   package: { individually: true },
   custom: {
     esbuild: {
@@ -98,6 +88,9 @@ const serverlessConfiguration: AWS = {
             ReadCapacityUnits: 1,
             WriteCapacityUnits: 1,
           },
+          StreamSpecification: {
+            StreamViewType: "NEW_AND_OLD_IMAGES",
+          },
           TableName: "mood-vault",
         },
         UpdateReplacePolicy: "Delete",
@@ -106,6 +99,7 @@ const serverlessConfiguration: AWS = {
           "aws:cdk:path": "IacStack/MoodVault/Resource",
         },
       },
+
       UserPool6BA7E5F2: {
         Type: "AWS::Cognito::UserPool",
         Properties: {
