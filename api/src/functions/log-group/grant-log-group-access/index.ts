@@ -14,11 +14,8 @@ export default {
           },
         },
         authorizer: {
-          name: "authorizer",
-          type: "COGNITO_USER_POOLS",
-          arn: {
-            "Fn::GetAtt": ["UserPool6BA7E5F2", "Arn"],
-          },
+          name: "verifyLogOnwership",
+          type: "REQUEST",
           identitySource: "method.request.header.Authorization",
           resultTtlInSeconds: 0,
         },

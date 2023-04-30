@@ -5,7 +5,7 @@ export default {
   events: [
     {
       http: {
-        method: "delete",
+        method: "get",
         path: "log-groups/{logGroupId}/logs/{logId}",
         authorizer: {
           name: "authorizer",

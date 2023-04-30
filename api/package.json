@@ -16,6 +16,7 @@
     "@middy/core": "^3.4.0",
     "@middy/http-json-body-parser": "^3.4.0",
     "@opensearch-project/opensearch": "^2.2.1",
+    "aws-jwt-verify": "^4.0.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

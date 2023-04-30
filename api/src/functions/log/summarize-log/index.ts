@@ -5,10 +5,10 @@ export default {
   events: [
     {
       http: {
-        method: "delete",
-        path: "log-groups/{logGroupId}/access/{userId}",
+        method: "get",
+        path: "log-groups/{logGroupId}/logs/{logId}/summarize",
         authorizer: {
-          name: "verifyLogOnwership",
+          name: "verifyLogAccess",
           type: "REQUEST",
           identitySource: "method.request.header.Authorization",
           resultTtlInSeconds: 0,

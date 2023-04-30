@@ -25,6 +25,12 @@ const serverlessConfiguration: AWS = {
       OPENSEARCH_USERNAME: "opensearch",
       OPENSEARCH_PASSWORD: "AduVwv0fXt73#KMLfE62T@l%@z#br801#%MEmh8vAC8%zZ@q0k",
       OPENSEARCH_INDEX: "moodvault",
+      COGNITO_USER_POOL_ID: {
+        Ref: "UserPool6BA7E5F2",
+      },
+      COGNITO_CLIENT_ID: {
+        Ref: "UserPoolClient2F5918F7",
+      },
     },
     iam: {
       role: {
@@ -99,7 +105,6 @@ const serverlessConfiguration: AWS = {
           "aws:cdk:path": "IacStack/MoodVault/Resource",
         },
       },
-
       UserPool6BA7E5F2: {
         Type: "AWS::Cognito::UserPool",
         Properties: {
