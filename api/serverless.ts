@@ -31,6 +31,8 @@ const serverlessConfiguration: AWS = {
       COGNITO_CLIENT_ID: {
         Ref: "UserPoolClient2F5918F7",
       },
+      SAGEMAKER_SUMMARIZER_ENDPOINT_NAME:
+        "jumpstart-example-huggingface-summariza-2023-05-02-20-38-36-023",
     },
     iam: {
       role: {
@@ -45,6 +47,16 @@ const serverlessConfiguration: AWS = {
           {
             Effect: "Allow",
             Action: ["es:*"],
+            Resource: "*",
+          },
+          {
+            Effect: "Allow",
+            Action: ["comprehend:*"],
+            Resource: "*",
+          },
+          {
+            Effect: "Allow",
+            Action: "sagemaker:InvokeEndpoint",
             Resource: "*",
           },
         ],
@@ -67,6 +79,22 @@ const serverlessConfiguration: AWS = {
   },
   resources: {
     Resources: {
+      DEFAULT4XXB6DED634: {
+        Type: "AWS::ApiGateway::GatewayResponse",
+        Properties: {
+          ResponseType: "DEFAULT_4XX",
+          RestApiId: {
+            Ref: "ApiGatewayRestApi",
+          },
+          ResponseParameters: {
+            "gatewayresponse.header.Access-Control-Allow-Origin": "'*'",
+            "gatewayresponse.header.Access-Control-Allow-Headers": "'*'",
+            "gatewayresponse.header.Access-Control-Allow-Methods": "'*'",
+          },
+        },
+        UpdateReplacePolicy: "Delete",
+        DeletionPolicy: "Delete",
+      },
       MoodVaultBD98DB49: {
         Type: "AWS::DynamoDB::Table",
         Properties: {
@@ -103,6 +131,100 @@ const serverlessConfiguration: AWS = {
         DeletionPolicy: "Delete",
         Metadata: {
           "aws:cdk:path": "IacStack/MoodVault/Resource",
+        },
+      },
+      TopicBFC7AF6E: {
+        Type: "AWS::SNS::Topic",
+        Properties: {
+          TopicName: "mood-vault",
+        },
+        UpdateReplacePolicy: "Delete",
+        DeletionPolicy: "Delete",
+        Metadata: {
+          "aws:cdk:path": "IacStack/Topic/Resource",
+        },
+      },
+      PipeRole4D7B8476: {
+        Type: "AWS::IAM::Role",
+        Properties: {
+          AssumeRolePolicyDocument: {
+            Statement: [
+              {
+                Action: "sts:AssumeRole",
+                Effect: "Allow",
+                Principal: {
+                  Service: "pipes.amazonaws.com",
+                },
+              },
+            ],
+            Version: "2012-10-17",
+          },
+          Policies: [
+            {
+              PolicyDocument: {
+                Statement: [
+                  {
+                    Action: "sns:Publish",
+                    Effect: "Allow",
+                    Resource: {
+                      Ref: "TopicBFC7AF6E",
+                    },
+                  },
+                ],
+                Version: "2012-10-17",
+              },
+              PolicyName: "sns-publish",
+            },
+            {
+              PolicyDocument: {
+                Statement: [
+                  {
+                    Action: [
+                      "dynamodb:DescribeStream",
+                      "dynamodb:GetRecords",
+                      "dynamodb:GetShardIterator",
+                      "dynamodb:ListStreams",
+                    ],
+                    Effect: "Allow",
+                    Resource: {
+                      "Fn::GetAtt": ["MoodVaultBD98DB49", "StreamArn"],
+                    },
+                  },
+                ],
+                Version: "2012-10-17",
+              },
+              PolicyName: "dynamodb-stream",
+            },
+          ],
+        },
+        UpdateReplacePolicy: "Delete",
+        DeletionPolicy: "Delete",
+        Metadata: {
+          "aws:cdk:path": "IacStack/PipeRole/Resource",
+        },
+      },
+      Pipe: {
+        Type: "AWS::Pipes::Pipe",
+        Properties: {
+          RoleArn: {
+            "Fn::GetAtt": ["PipeRole4D7B8476", "Arn"],
+          },
+          Source: {
+            "Fn::GetAtt": ["MoodVaultBD98DB49", "StreamArn"],
+          },
+          Target: {
+            Ref: "TopicBFC7AF6E",
+          },
+          SourceParameters: {
+            DynamoDBStreamParameters: {
+              StartingPosition: "TRIM_HORIZON",
+            },
+          },
+        },
+        UpdateReplacePolicy: "Delete",
+        DeletionPolicy: "Delete",
+        Metadata: {
+          "aws:cdk:path": "IacStack/Pipe",
         },
       },
       UserPool6BA7E5F2: {

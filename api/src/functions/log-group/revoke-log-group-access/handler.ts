@@ -18,8 +18,8 @@ const handler: ValidatedEventAPIGatewayProxyEvent<void> = async (event) => {
       new DeleteCommand({
         TableName: process.env.MOOD_VAULT_TABLE,
         Key: {
-          pk: `#LOG_GROUP#${event.pathParameters.logGroupId}#ACCESS`,
-          sk: event.pathParameters.userId,
+          pk: `LOG_GROUP_ACCESS_PRINCIPLE#${event.pathParameters.userId}`,
+          sk: event.pathParameters.logGroupId,
         },
       })
     );

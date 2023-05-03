@@ -7,7 +7,16 @@ export default {
       http: {
         cors: true,
         method: "get",
-        path: "profile/therapist",
+        path: "log-groups/{logGroupId}/logs/assigned-logs",
+        request: {
+          parameters: {
+            querystrings: {
+              sub: true,
+              key: false,
+              limit: true,
+            },
+          },
+        },
         authorizer: {
           name: "authorizer",
           type: "COGNITO_USER_POOLS",

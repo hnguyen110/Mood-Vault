@@ -10,10 +10,13 @@
     "node": ">=14.15.0"
   },
   "dependencies": {
+    "@aws-sdk/client-comprehend": "^3.321.1",
     "@aws-sdk/client-dynamodb": "^3.321.1",
+    "@aws-sdk/client-sagemaker-runtime": "^3.325.0",
     "@aws-sdk/lib-dynamodb": "^3.321.1",
     "@aws-sdk/util-dynamodb": "^3.321.1",
     "@middy/core": "^3.4.0",
+    "@middy/http-cors": "^4.4.0",
     "@middy/http-json-body-parser": "^3.4.0",
     "@opensearch-project/opensearch": "^2.2.1",
     "aws-jwt-verify": "^4.0.0",

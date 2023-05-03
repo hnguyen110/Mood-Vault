@@ -18,14 +18,14 @@ const handler: ValidatedEventAPIGatewayProxyEvent<void> = async (event) => {
       new GetCommand({
         TableName: process.env.MOOD_VAULT_TABLE,
         Key: {
-          pk: `LOG_SUMMARY`,
-          sk: event.pathParameters.logId,
+          pk: "LOG_SENTIMENT",
+          sk: `${event.pathParameters.logId}`,
         },
       })
     );
 
     return formatJSONResponse({
-      ...(Item ?? {}),
+      ...Item,
     });
   } catch (e) {
     console.log(e);

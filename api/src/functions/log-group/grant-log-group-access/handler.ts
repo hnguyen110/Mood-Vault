@@ -19,8 +19,10 @@ const handler: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
     console.log(event);
 
     const item = {
-      pk: `#LOG_GROUP#${event.pathParameters.logGroupId}#ACCESS`,
-      sk: event.body.user,
+      pk: `LOG_GROUP_ACCESS_PRINCIPLE#${event.body.user}`,
+      sk: event.pathParameters.logGroupId,
+      sub: event.requestContext.authorizer.sub,
+      title: event.body.title,
     };
 
     await client.send(

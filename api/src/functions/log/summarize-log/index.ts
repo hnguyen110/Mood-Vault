@@ -5,8 +5,9 @@ export default {
   events: [
     {
       http: {
+        cors: true,
         method: "get",
-        path: "log-groups/{logGroupId}/logs/{logId}/summarize",
+        path: "log-groups/{logGroupId}/logs/{logId}/summary",
         authorizer: {
           name: "verifyLogAccess",
           type: "REQUEST",

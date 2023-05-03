@@ -7,7 +7,15 @@ export default {
       http: {
         cors: true,
         method: "get",
-        path: "profile/therapist",
+        path: "log-groups",
+        request: {
+          parameters: {
+            querystrings: {
+              key: false,
+              limit: true,
+            },
+          },
+        },
         authorizer: {
           name: "authorizer",
           type: "COGNITO_USER_POOLS",

@@ -6,6 +6,7 @@ export default {
   events: [
     {
       http: {
+        cors: true,
         method: "put",
         path: "profile/therapist",
         request: {

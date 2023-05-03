@@ -5,6 +5,7 @@ export default {
   events: [
     {
       http: {
+        cors: true,
         method: "get",
         path: "profile/therapist/search",
         request: {

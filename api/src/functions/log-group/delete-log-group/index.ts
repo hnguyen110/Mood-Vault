@@ -5,6 +5,7 @@ export default {
   events: [
     {
       http: {
+        cors: true,
         method: "delete",
         path: "log-groups/{logGroupId}",
         authorizer: {

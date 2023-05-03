@@ -53,8 +53,8 @@ export const handler = async (event: APIGatewayRequestAuthorizerEvent) => {
       new GetCommand({
         TableName: process.env.MOOD_VAULT_TABLE,
         Key: {
-          pk: `#LOG_GROUP#${event.pathParameters.logGroupId}#ACCESS`,
-          sk: sub,
+          pk: `LOG_GROUP_ACCESS_PRINCIPLE#${sub}`,
+          sk: event.pathParameters.logGroupId,
         },
       })
     );

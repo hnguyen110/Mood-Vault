@@ -7,13 +7,10 @@ export default {
       http: {
         cors: true,
         method: "get",
-        path: "profile/therapist",
+        path: "log-groups/{logGroupId}/logs/{logId}/sentiment",
         authorizer: {
-          name: "authorizer",
-          type: "COGNITO_USER_POOLS",
-          arn: {
-            "Fn::GetAtt": ["UserPool6BA7E5F2", "Arn"],
-          },
+          name: "verifyLogAccess",
+          type: "REQUEST",
           identitySource: "method.request.header.Authorization",
           resultTtlInSeconds: 0,
         },
